@@ -1,0 +1,15 @@
+---
+
+- name: Check if piwik dir exists
+  stat: path=/var/www/piwik
+  register: check_path
+
+- name: Unarchive Matomo file that need to be downloaded
+  unarchive:
+    src: https://builds.piwik.org/piwik.zip
+    dest: /var/www
+    remote_src: true
+    owner: www-data
+    group: www-data
+    mode: 0755
+  when: check_path.stat.exists == false

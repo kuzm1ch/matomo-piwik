@@ -1,0 +1,5 @@
+---
+# defaults file for role
+hostname: matomo
+server_name: example.com
+db_password: examplepassword

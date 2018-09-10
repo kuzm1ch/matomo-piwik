@@ -1,0 +1,20 @@
+---
+
+# - name: ensure that dev public keys is in place
+#   authorized_key:
+#     user: "{{ ansible_ssh_user }}"
+#     state: present
+#     key: "{{ item }}"
+#   with_file:
+#     - ssh_public_keys/...
+
+- name: ensure that we have correct hostname
+  hostname:
+    name: "{{ hostname }}"
+
+- name: Fix /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item }}"
+  with_items:
+    - "127.0.0.1    {{ hostname }}"

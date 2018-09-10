@@ -1,0 +1,26 @@
+---
+
+- name: ensure that unzip is installed
+  apt:
+    name: unzip
+    state: present
+
+- name: ensure php and required extensession are installed
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - php7.0
+    - php7.0-curl
+    - php7.0-gd
+    - php7.0-cli
+    - php7.0-mysql
+    - php-xml
+    - php7.0-mbstring
+    - php-fpm
+
+# in case you for free ssl certs
+- name: Install letsencrypt|certbot
+  package:
+    name: letsencrypt
+    state: present

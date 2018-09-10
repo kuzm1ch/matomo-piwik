@@ -1,0 +1,40 @@
+---
+
+- name: ensure mysql-server is installed
+  apt:
+    name: mysql-server
+    update_cache: "yes"
+    state: present
+    allow_unauthenticated: "yes"
+
+# In case you prefer ubuntu 16.04 image from aws, by default it haven't python 2.7
+# and mysql-python module do not work properly with python3 (ansible_python_interpreter=/usr/bin/python3)
+# - apt:
+#     name: python2.7
+#     state: present
+#     update_cache: yes
+
+# - name: create python symlink
+#   file:
+#     src: /usr/bin/python2.7
+#     dest: /usr/bin/python
+#     owner: root
+#     group: root
+#     state: link
+
+- name: install python mysql bindings
+  apt: name=python-mysqldb state=present
+  become: true
+  become_method: sudo
+
+- name: Create a new database with name 'piwikdata'
+  mysql_db:
+    name: piwikdata
+    state: present
+
+- name: create user and grant privileges for db
+  mysql_user:
+    name: piwik
+    password: "{{ db_password }}"
+    priv: 'piwikdata.*:ALL'
+    state: present
